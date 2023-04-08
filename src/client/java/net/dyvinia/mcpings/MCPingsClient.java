@@ -109,7 +109,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 			client.getSoundManager().play(
 					new DirectionalSoundInstance(
-							SoundEvents.BLOCK_ANVIL_LAND,
+							SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(),
 							SoundCategory.MASTER,
 							1f,
 							1f,
