@@ -1,17 +1,23 @@
 package net.dyvinia.mcpings.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.dyvinia.mcpings.MCPingsClient;
 import net.dyvinia.mcpings.util.PingData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;
 
 public class PingHud implements HudRenderCallback {
+
+    private static final Identifier PING_STANDARD = new Identifier("mcpings", "textures/ping_standard.png");
+
     @Override
     public void onHudRender(MatrixStack stack, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -25,23 +31,22 @@ public class PingHud implements HudRenderCallback {
         for (PingData ping : MCPingsClient.pingList) {
             stack.push();
 
+            double distance = cameraPosVec.distanceTo(ping.pos);
             Vector4f screenPos = screenPosWindowed(ping.screenPos, 16, client.getWindow());
             boolean onScreen = screenPos == ping.screenPos;
 
             stack.translate(screenPos.x/uiScale, screenPos.y/uiScale, 0); // stack to ping center
             stack.scale((float) (2/uiScale), (float) (2/uiScale), 1); // constant scale
 
-            double distance = cameraPosVec.distanceTo(ping.pos);
-            if (distance > scaleDist) stack.scale(0.5f, 0.5f, 1);
+            // scale if ping is far and onscreen
+            if (distance > scaleDist && onScreen) stack.scale(0.5f, 0.5f, 1);
 
             // draw ping icon
-            int iconHeight = 3;
-            stack.translate(-2, -1, 0); // visually center ping icon
-            DrawableHelper.fill(stack, 0, 0, iconHeight + 1, iconHeight + 1, shadowBlack);
-            DrawableHelper.fill(stack, 0, 0, iconHeight, iconHeight, pingColor);
-            stack.translate(2, 1, 0); // undo center
+            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+            RenderSystem.setShaderTexture(0, PING_STANDARD);
+            DrawableHelper.drawTexture(stack, -4, -2, 0, 0, 8, 8, 8, 8);
 
-            // don't draw text if ping not on screen
+            // skip drawing text if ping not on screen
             if (!onScreen) {
                 stack.pop();
                 continue;
