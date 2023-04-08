@@ -1,6 +1,7 @@
 package net.dyvinia.mcpings.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.dyvinia.mcpings.MCPings;
 import net.dyvinia.mcpings.MCPingsClient;
 import net.dyvinia.mcpings.util.PingData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -24,7 +25,7 @@ public class PingHud implements HudRenderCallback {
         double uiScale = client.getWindow().getScaleFactor();
         Vec3d cameraPosVec = client.player.getCameraPosVec(tickDelta);
 
-        int pingColor = ColorHelper.Argb.getArgb(255, 255, 255, 255);
+        int pingColor = MCPings.CONFIG.pingStandardColor().argb();
         int shadowBlack = ColorHelper.Argb.getArgb(135, 0, 0, 0);
         int scaleDist = 10;
 

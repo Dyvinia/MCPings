@@ -1,5 +1,6 @@
 package net.dyvinia.mcpings;
 
+import net.dyvinia.config.MCPingsConfig;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MCPings implements ModInitializer {
+	public static final MCPingsConfig CONFIG = MCPingsConfig.createAndLoad();
+
 	public static final Logger LOGGER = LoggerFactory.getLogger("mcpings");
 
 	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s", "ping-location");

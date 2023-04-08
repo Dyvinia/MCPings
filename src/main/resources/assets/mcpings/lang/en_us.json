@@ -1,4 +1,26 @@
 {
   "mcpings.name": "MCPings",
+
+  "text.config.mcpings-config.section.audio": "Audio",
+
+  "text.config.mcpings-config.option.pingVolume": "Ping Volume",
+  "text.config.mcpings-config.option.pingVolume.tooltip": "Controls overall volume",
+
+  "text.config.mcpings-config.option.pingVolumeFalloff": "Ping Volume Falloff",
+  "text.config.mcpings-config.option.pingVolumeFalloff.tooltip": "Controls how loud/quiet far away pings are.\nHigher values result in more falloff",
+
+  "text.config.mcpings-config.section.visuals": "Visuals",
+
+  "text.config.mcpings-config.option.pingDuration": "Ping Duration",
+  "text.config.mcpings-config.option.pingDuration.tooltip": "Controls how long pings will stay",
+
+  "text.config.mcpings-config.option.pingMaxCount": "Ping Max Count",
+  "text.config.mcpings-config.option.pingMaxCount.tooltip": "Changes how many pings will be visible to you at once",
+
+  "text.config.mcpings-config.section.color": "Colors",
+
+  "text.config.mcpings-config.option.pingStandardColor": "Standard Ping Color",
+  "text.config.mcpings-config.option.pingStandardColor.tooltip": "Standard Pings",
+
   "mcpings.key.mark-location": "Ping Location"
 }

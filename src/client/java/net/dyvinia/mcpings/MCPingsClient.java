@@ -37,7 +37,6 @@ import java.util.UUID;
 
 public class MCPingsClient implements ClientModInitializer {
 	private static final String keysCategory = "mcpings.name";
-
 	private static KeyBinding keyPing;
 
 	public static List<PingData> pingList = new ArrayList<>();
@@ -141,6 +140,6 @@ public class MCPingsClient implements ClientModInitializer {
 			ping.aliveTime = Math.toIntExact(world.getTime() - ping.spawnTime);
 		}
 
-		pingList.removeIf(p -> p.aliveTime > 8 * 20);
+		pingList.removeIf(p -> p.aliveTime > MCPings.CONFIG.pingDuration() * 20);
 	}
 }

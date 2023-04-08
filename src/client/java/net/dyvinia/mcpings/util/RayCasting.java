@@ -24,7 +24,7 @@ public class RayCasting {
             Box targetBoundingBox = ent.getBoundingBox().expand(ent.getTargetingMargin()).expand(0.25);
             Optional<Vec3d> hitPos = targetBoundingBox.raycast(min, max);
 
-            if (!hitPos.isPresent()) continue;
+            if (hitPos.isEmpty()) continue;
 
             EntityHitResult hitResult = new EntityHitResult(ent, hitPos.get());
             double hitDist = min.squaredDistanceTo(hitResult.getPos());
