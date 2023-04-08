@@ -11,7 +11,7 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;
 
-public class PingOverlay implements HudRenderCallback {
+public class PingHud implements HudRenderCallback {
     @Override
     public void onHudRender(MatrixStack stack, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();

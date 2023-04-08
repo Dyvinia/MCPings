@@ -1,7 +1,7 @@
 package net.dyvinia.mcpings;
 
 import com.google.common.collect.Iterables;
-import net.dyvinia.mcpings.render.PingOverlay;
+import net.dyvinia.mcpings.render.PingHud;
 import net.dyvinia.mcpings.util.DirectionalSoundInstance;
 import net.dyvinia.mcpings.util.MathHelper;
 import net.dyvinia.mcpings.util.PingData;
@@ -57,7 +57,7 @@ public class MCPingsClient implements ClientModInitializer {
 			}
 		});
 
-		HudRenderCallback.EVENT.register(new PingOverlay());
+		HudRenderCallback.EVENT.register(new PingHud());
 	}
 
 	public static void markLoc() {
