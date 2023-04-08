@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 public class MCPings implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("mcpings");
 
-	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s", "ping-loc");
-	public static final Identifier S2C_PING_LOC = new Identifier("mcpings-s2c", "ping-loc");
+	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s", "ping-location");
+	public static final Identifier S2C_PING_LOC = new Identifier("mcpings-s2c", "ping-location");
 
 	@Override
 	public void onInitialize() {

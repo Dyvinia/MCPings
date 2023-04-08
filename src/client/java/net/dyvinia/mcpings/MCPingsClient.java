@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MCPingsClient implements ClientModInitializer {
-	private static String keysCategory = "mcpings.name";
+	private static final String keysCategory = "mcpings.name";
 
 	private static KeyBinding keyPing;
 
@@ -130,8 +130,7 @@ public class MCPingsClient implements ClientModInitializer {
 			if (ping.hitEntity != null) {
 				Entity ent = Iterables.tryFind(world.getEntities(), entity -> entity.getUuid().equals(ping.hitEntity)).orNull();
 				if (ent != null) {
-					if (ent instanceof ItemEntity) {
-						ItemEntity itemEnt = (ItemEntity) ent;
+					if (ent instanceof ItemEntity itemEnt) {
 						ping.itemStack = itemEnt.getStack().copy();
 					}
 					ping.pos = ent.getLerpedPos(tickDelta).add(0.0, ent.getBoundingBox().getYLength(), 0.0);
