@@ -22,6 +22,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.mob.Angerable;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -72,12 +76,25 @@ public class MCPingsClient implements ClientModInitializer {
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
 		String channel = "";
+		PingData.Type pingType = PingData.Type.STANDARD;
+
+		if (hitResult instanceof EntityHitResult entHit) {
+			Entity ent = entHit.getEntity();
+			if (ent instanceof PlayerEntity)
+				pingType = PingData.Type.PLAYER;
+			else if (ent instanceof Monster)
+				pingType = PingData.Type.MONSTER;
+			else if (ent instanceof Angerable)
+				pingType = PingData.Type.ANGERABLE;
+			else if (ent instanceof MobEntity)
+				pingType = PingData.Type.FRIENDLY;
+		}
 
 		PacketByteBuf packet = PacketByteBufs.create(); // create packet
 
 		packet.writeString(channel); // channel
 		packet.writeString(username); // sender's username
-		packet.writeString(""); // ping type
+		packet.writeInt(pingType.ordinal()); // ping type
 
 		packet.writeDouble(hitResult.getPos().x); // pos x
 		packet.writeDouble(hitResult.getPos().y); // pos y
@@ -97,14 +114,14 @@ public class MCPingsClient implements ClientModInitializer {
 
 		String pingChannel = buf.readString();
 		String pingSender = buf.readString();
-		String pingType = buf.readString();
+		Integer pingTypeOrdinal = buf.readInt();
 
 		Vec3d pingPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 
 		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
 
 		client.execute(() -> {
-			pingList.add(new PingData(pingSender, pingType, pingPos, pingEntity, client.world.getTime()));
+			pingList.add(new PingData(pingSender, pingTypeOrdinal, pingPos, pingEntity, client.world.getTime()));
 
 			client.getSoundManager().play(
 					new DirectionalSoundInstance(

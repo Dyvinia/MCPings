@@ -1,6 +1,8 @@
 {
   "mcpings.name": "MCPings",
 
+  "text.config.mcpings-config.title": "MCPings Config",
+
   "text.config.mcpings-config.section.audio": "Audio",
 
   "text.config.mcpings-config.option.pingVolume": "Ping Volume",
@@ -14,13 +16,11 @@
   "text.config.mcpings-config.option.pingDuration": "Ping Duration",
   "text.config.mcpings-config.option.pingDuration.tooltip": "Controls how long pings will stay",
 
-  "text.config.mcpings-config.option.pingMaxCount": "Ping Max Count",
-  "text.config.mcpings-config.option.pingMaxCount.tooltip": "Changes how many pings will be visible to you at once",
-
-  "text.config.mcpings-config.section.color": "Colors",
-
   "text.config.mcpings-config.option.pingStandardColor": "Standard Ping Color",
-  "text.config.mcpings-config.option.pingStandardColor.tooltip": "Standard Pings",
+  "text.config.mcpings-config.option.pingMonsterColor": "Monster Ping Color",
+  "text.config.mcpings-config.option.pingAngerableColor": "Neutral Mob Ping Color",
+  "text.config.mcpings-config.option.pingFriendlyColor": "Friendly Mob Ping Color",
+  "text.config.mcpings-config.option.pingPlayerColor": "Player Ping Color",
 
   "mcpings.key.mark-location": "Ping Location"
 }

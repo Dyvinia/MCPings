@@ -1,6 +1,7 @@
 package net.dyvinia.mcpings.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.wispforest.owo.ui.core.Color;
 import net.dyvinia.mcpings.MCPings;
 import net.dyvinia.mcpings.MCPingsClient;
 import net.dyvinia.mcpings.util.PingData;
@@ -24,13 +25,13 @@ public class PingHud implements HudRenderCallback {
         MinecraftClient client = MinecraftClient.getInstance();
         double uiScale = client.getWindow().getScaleFactor();
         Vec3d cameraPosVec = client.player.getCameraPosVec(tickDelta);
-
-        int pingColor = MCPings.CONFIG.pingStandardColor().argb();
-        int shadowBlack = ColorHelper.Argb.getArgb(135, 0, 0, 0);
         int scaleDist = 10;
 
         for (PingData ping : MCPingsClient.pingList) {
             stack.push();
+
+            Vector4f pingColor = getPingColor(ping);
+            int shadowBlack = ColorHelper.Argb.getArgb(135, 0, 0, 0);
 
             double distance = cameraPosVec.distanceTo(ping.pos);
             Vector4f screenPos = screenPosWindowed(ping.screenPos, 16, client.getWindow());
@@ -44,11 +45,13 @@ public class PingHud implements HudRenderCallback {
 
             // draw ping icon
             RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+            RenderSystem.setShaderColor(pingColor.x, pingColor.y, pingColor.z, pingColor.w);
             RenderSystem.setShaderTexture(0, PING_STANDARD);
             DrawableHelper.drawTexture(stack, -4, -2, 0, 0, 8, 8, 8, 8);
 
             // skip drawing text if ping not on screen
             if (!onScreen) {
+                RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
                 stack.pop();
                 continue;
             }
@@ -59,7 +62,7 @@ public class PingHud implements HudRenderCallback {
 
             stack.translate(-distanceTextWidth/2, -12, 0);
             DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
-            client.textRenderer.drawWithShadow(stack, distanceText, 0f, 0f, pingColor);
+            client.textRenderer.drawWithShadow(stack, distanceText, 0f, 0f, -1);
             stack.translate(distanceTextWidth/2, 0, 0); // recenter x
 
             // username text
@@ -71,10 +74,11 @@ public class PingHud implements HudRenderCallback {
 
             stack.translate(-nameTextWidth/2, -14, 0);
             DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
-            client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, pingColor);
+            client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, -1);
             stack.translate(nameTextWidth/2, 0, 0); // recenter x
 
             // end
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             stack.pop();
         }
     }
@@ -91,5 +95,16 @@ public class PingHud implements HudRenderCallback {
         else if (newScreenPos.y < margin) newScreenPos = new Vector4f(newScreenPos.x, margin, newScreenPos.z, newScreenPos.w);
 
         return newScreenPos;
+    }
+
+    private Vector4f getPingColor(PingData ping) {
+        Color c = switch (ping.pingType) {
+            case STANDARD -> MCPings.CONFIG.pingStandardColor();
+            case MONSTER -> MCPings.CONFIG.pingMonsterColor();
+            case ANGERABLE -> MCPings.CONFIG.pingAngerableColor();
+            case FRIENDLY -> MCPings.CONFIG.pingFriendlyColor();
+            case PLAYER -> MCPings.CONFIG.pingPlayerColor();
+        };
+        return new Vector4f(c.red(), c.green(), c.blue(), c.alpha());
     }
 }

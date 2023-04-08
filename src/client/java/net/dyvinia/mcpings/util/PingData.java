@@ -20,7 +20,7 @@ public record PingData(
 
 public class PingData {
     public String senderName;
-    public String pingType;
+    public Type pingType;
     public Vec3d pos;
     public Vector4f screenPos;
     public UUID hitEntity;
@@ -29,11 +29,23 @@ public class PingData {
     public Integer aliveTime;
 
 
-    public PingData(String senderName, String pingType, Vec3d pos, UUID hitEntity, long spawnTime) {
+    public PingData(String senderName, Integer pingTypeOrdinal, Vec3d pos, UUID hitEntity, long spawnTime) {
         this.senderName = senderName;
-        this.pingType = pingType;
+        this.pingType = Type.fromOrdinal(pingTypeOrdinal);
         this.pos = pos;
         this.hitEntity = hitEntity;
         this.spawnTime = (int) spawnTime;
+    }
+
+    public enum Type {
+        STANDARD,
+        MONSTER,
+        ANGERABLE,
+        FRIENDLY,
+        PLAYER;
+
+        public static Type fromOrdinal(int n) {
+            return values()[n];
+        }
     }
 }
