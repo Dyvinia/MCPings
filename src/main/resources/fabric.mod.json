@@ -3,13 +3,13 @@
 	"id": "mcpings",
 	"version": "${version}",
 	"name": "MCPings",
-	"description": "",
+	"description": "Adds pinging locations to Minecraft. Based on MinecraftPingWheel by LukenSkyne",
 	"authors": [
 		"Dyvinia"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Dyvinia/MCPings",
+		"sources": "https://github.com/Dyvinia/MCPings.git"
 	},
 	"license": "MIT",
 	"icon": "assets/mcpings/icon.png",
