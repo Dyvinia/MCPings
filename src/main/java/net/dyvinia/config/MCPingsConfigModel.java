@@ -18,6 +18,14 @@ public class MCPingsConfigModel {
     @RangeConstraint(min = 1, max = 16)
     public int pingDuration = 8;
 
+    public SizeMultiplier pingSizeMult = SizeMultiplier.ONE;
+
+    public enum SizeMultiplier {
+        ONE, TWO, THREE;
+    }
+
+    public boolean pingShowUsername = true;
+
     public Color pingStandardColor = Color.ofRgb(0xFFFFFF);
     public Color pingMonsterColor = Color.ofRgb(0xFF5050);
     public Color pingAngerableColor = Color.ofRgb(0xFFBB55);

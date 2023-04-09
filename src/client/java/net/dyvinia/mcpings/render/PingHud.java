@@ -39,6 +39,7 @@ public class PingHud implements HudRenderCallback {
 
             stack.translate(screenPos.x/uiScale, screenPos.y/uiScale, 0); // stack to ping center
             stack.scale((float) (2/uiScale), (float) (2/uiScale), 1); // constant scale
+            stack.scale(MCPings.CONFIG.pingSizeMult().ordinal() + 1, MCPings.CONFIG.pingSizeMult().ordinal() + 1, 1); // config scale
 
             // scale if ping is far and onscreen
             if (distance > scaleDist && onScreen) stack.scale(0.5f, 0.5f, 1);
@@ -66,16 +67,18 @@ public class PingHud implements HudRenderCallback {
             stack.translate(distanceTextWidth/2, 0, 0); // recenter x
 
             // username text
-            String nameText = ping.senderName;
-            int nameTextWidth = client.textRenderer.getWidth(nameText);
+            if (MCPings.CONFIG.pingShowUsername()) {
+                String nameText = ping.senderName;
+                int nameTextWidth = client.textRenderer.getWidth(nameText);
 
-            stack.scale(0.5f, 0.5f, 1f);
-            if (distance > scaleDist) stack.scale(2, 2, 1);
+                stack.scale(0.5f, 0.5f, 1f);
+                if (distance > scaleDist) stack.scale(2, 2, 1);
 
-            stack.translate(-nameTextWidth/2, -14, 0);
-            DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
-            client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, -1);
-            stack.translate(nameTextWidth/2, 0, 0); // recenter x
+                stack.translate(-nameTextWidth/2, -14, 0);
+                DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
+                client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, -1);
+                stack.translate(nameTextWidth/2, 0, 0); // recenter x
+            }
 
             // end
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);

@@ -16,6 +16,16 @@
   "text.config.mcpings-config.option.pingDuration": "Ping Duration",
   "text.config.mcpings-config.option.pingDuration.tooltip": "Controls how long pings will stay",
 
+  "text.config.mcpings-config.option.pingSizeMult": "Ping Size",
+  "text.config.mcpings-config.option.pingSizeMult.tooltip": "Multiplier for Ping's size",
+
+  "text.config.mcpings-config.option.pingSizeMult.value.one": "1x",
+  "text.config.mcpings-config.option.pingSizeMult.value.two": "2x",
+  "text.config.mcpings-config.option.pingSizeMult.value.three": "3x",
+
+  "text.config.mcpings-config.option.pingShowUsername": "Show Pinger's Username",
+  "text.config.mcpings-config.option.pingShowUsername.tooltip": "Shows the sender's username above the ping",
+
   "text.config.mcpings-config.option.pingStandardColor": "Standard Ping Color",
   "text.config.mcpings-config.option.pingMonsterColor": "Monster Ping Color",
   "text.config.mcpings-config.option.pingAngerableColor": "Neutral Mob Ping Color",
