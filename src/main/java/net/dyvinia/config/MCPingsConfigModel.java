@@ -4,6 +4,7 @@ import io.wispforest.owo.config.annotation.*;
 import io.wispforest.owo.ui.core.Color;
 
 
+@SuppressWarnings("unused")
 @Modmenu(modId = "mcpings")
 @Config(name = "mcpings-config", wrapperName = "MCPingsConfig")
 public class MCPingsConfigModel {
