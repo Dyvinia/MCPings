@@ -17,8 +17,8 @@ public class MCPings implements ModInitializer {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("mcpings");
 
-	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s", "ping-location");
-	public static final Identifier S2C_PING_LOC = new Identifier("mcpings-s2c", "ping-location");
+	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s:ping");
+	public static final Identifier S2C_PING_LOC = new Identifier("mcpings-s2c:ping");
 
 	@Override
 	public void onInitialize() {

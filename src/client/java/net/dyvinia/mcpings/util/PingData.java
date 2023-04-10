@@ -29,9 +29,9 @@ public class PingData {
     public Integer aliveTime;
 
 
-    public PingData(String senderName, Integer pingTypeOrdinal, Vec3d pos, UUID hitEntity, long spawnTime) {
+    public PingData(String senderName, Type pingType, Vec3d pos, UUID hitEntity, long spawnTime) {
         this.senderName = senderName;
-        this.pingType = Type.fromOrdinal(pingTypeOrdinal);
+        this.pingType = pingType;
         this.pos = pos;
         this.hitEntity = hitEntity;
         this.spawnTime = (int) spawnTime;

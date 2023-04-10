@@ -121,7 +121,7 @@ public class MCPingsClient implements ClientModInitializer {
 		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
 
 		client.execute(() -> {
-			pingList.add(new PingData(pingSender, pingTypeOrdinal, pingPos, pingEntity, client.world.getTime()));
+			pingList.add(new PingData(pingSender, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime()));
 
 			client.getSoundManager().play(
 					new DirectionalSoundInstance(
