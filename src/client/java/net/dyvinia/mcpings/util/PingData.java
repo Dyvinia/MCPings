@@ -6,17 +6,6 @@ import org.joml.Vector4f;
 
 import java.util.UUID;
 
-/*
-public record PingData(
-        String senderName,
-        String pingType,
-        Vec3d pos,
-        Integer spawnTime,
-        Integer aliveTime,
-        UUID hitEntity
-
-) {}*/
-
 
 public class PingData {
     public String senderName;
