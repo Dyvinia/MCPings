@@ -38,7 +38,7 @@ public class RayCasting {
         return minHitResult;
     }
 
-    public static HitResult traceDirectional(Vec3d direction, float tickDelta, double maxDistance, boolean hitFluids) {
+    public static HitResult traceDirectional(Vec3d direction, float tickDelta, double maxDistance, boolean hitFluids, boolean hitOnlySolid) {
         Entity cameraEnt = MinecraftClient.getInstance().cameraEntity;
 
         if (cameraEnt == null || cameraEnt.world == null) {
@@ -55,7 +55,7 @@ public class RayCasting {
                 new RaycastContext(
                         rayStartVec,
                         rayEndVec,
-                        RaycastContext.ShapeType.OUTLINE,
+                        hitOnlySolid ? RaycastContext.ShapeType.COLLIDER : RaycastContext.ShapeType.OUTLINE,
                         hitFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE,
                         cameraEnt
                 )

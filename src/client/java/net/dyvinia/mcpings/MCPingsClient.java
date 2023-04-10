@@ -72,7 +72,10 @@ public class MCPingsClient implements ClientModInitializer {
 		else queuePing = false;
 
 		ClientPlayerEntity cameraEnt = (ClientPlayerEntity) MinecraftClient.getInstance().cameraEntity;
-		HitResult hitResult = RayCasting.traceDirectional(cameraEnt.getRotationVec(tickDelta), tickDelta, 256, cameraEnt.isSneaking());
+		HitResult hitResult = RayCasting.traceDirectional(
+				cameraEnt.getRotationVec(tickDelta),
+				tickDelta, 256, cameraEnt.isSneaking(), MCPings.CONFIG.pingHitOnlySolid());
+
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
 		String channel = "";

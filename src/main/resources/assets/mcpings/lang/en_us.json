@@ -3,15 +3,13 @@
 
   "text.config.mcpings-config.title": "MCPings Config",
 
-  "text.config.mcpings-config.section.audio": "Audio",
+  "text.config.mcpings-config.section.main": "Main",
 
   "text.config.mcpings-config.option.pingVolume": "Ping Volume",
   "text.config.mcpings-config.option.pingVolume.tooltip": "Controls overall volume",
 
   "text.config.mcpings-config.option.pingVolumeFalloff": "Ping Volume Falloff",
   "text.config.mcpings-config.option.pingVolumeFalloff.tooltip": "Controls how loud/quiet far away pings are.\nHigher values result in more falloff",
-
-  "text.config.mcpings-config.section.visuals": "Visuals",
 
   "text.config.mcpings-config.option.pingDuration": "Ping Duration",
   "text.config.mcpings-config.option.pingDuration.tooltip": "Controls how long pings will stay",
@@ -25,6 +23,11 @@
 
   "text.config.mcpings-config.option.pingShowUsername": "Show Pinger's Username",
   "text.config.mcpings-config.option.pingShowUsername.tooltip": "Shows the sender's username above the ping",
+
+  "text.config.mcpings-config.option.pingHitOnlySolid": "Only Ping Solid Blocks",
+  "text.config.mcpings-config.option.pingHitOnlySolid.tooltip": "When enabled, pings will go through blocks like tall grass and saplings",
+
+  "text.config.mcpings-config.section.color": "Colors",
 
   "text.config.mcpings-config.option.pingStandardColor": "Standard Ping Color",
   "text.config.mcpings-config.option.pingMonsterColor": "Monster Ping Color",
