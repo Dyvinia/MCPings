@@ -1,6 +1,6 @@
 package net.dyvinia.mcpings;
 
-import net.dyvinia.config.MCPingsConfig;
+import net.dyvinia.mcpings.config.MCPingsConfig;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;

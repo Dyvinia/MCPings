@@ -1,4 +1,4 @@
-package net.dyvinia.config;
+package net.dyvinia.mcpings.config;
 
 import io.wispforest.owo.config.annotation.*;
 import io.wispforest.owo.ui.core.Color;
