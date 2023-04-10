@@ -53,7 +53,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		keyPing = KeyBindingHelper.registerKeyBinding(new KeyBinding("mcpings.key.mark-location", InputUtil.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_3, keysCategory));
 
-		ClientPlayNetworking.registerGlobalReceiver(MCPings.S2C_PING_LOC, MCPingsClient::onReceivePing);
+		ClientPlayNetworking.registerGlobalReceiver(MCPings.S2C_PING, MCPingsClient::onReceivePing);
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (keyPing.wasPressed()) {
 				markLoc();
@@ -109,7 +109,7 @@ public class MCPingsClient implements ClientModInitializer {
 		}
 		else packet.writeBoolean(false);
 
-		ClientPlayNetworking.send(MCPings.C2S_PING_LOC, packet);
+		ClientPlayNetworking.send(MCPings.C2S_PING, packet);
 	}
 
 	private static void onReceivePing(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {

@@ -17,18 +17,18 @@ public class MCPings implements ModInitializer {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("mcpings");
 
-	public static final Identifier C2S_PING_LOC = new Identifier("mcpings-c2s:ping");
-	public static final Identifier S2C_PING_LOC = new Identifier("mcpings-s2c:ping");
+	public static final Identifier C2S_PING = new Identifier("mcpings-c2s:ping");
+	public static final Identifier S2C_PING = new Identifier("mcpings-s2c:ping");
 
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Server Init");
 
-		ServerPlayNetworking.registerGlobalReceiver(C2S_PING_LOC, (server, player, handler, buf, responseSender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(C2S_PING, (server, player, handler, buf, responseSender) -> {
 			PacketByteBuf packet = PacketByteBufs.copy(buf);
 
 			for (ServerPlayerEntity p : PlayerLookup.world(player.getWorld())) {
-				ServerPlayNetworking.send(p, S2C_PING_LOC, packet);
+				ServerPlayNetworking.send(p, S2C_PING, packet);
 			}
 		});
 	}
