@@ -10,6 +10,8 @@ import io.wispforest.owo.ui.core.Color;
 public class MCPingsConfigModel {
 
     @SectionHeader("main")
+    public String pingChannel = "";
+
     @RangeConstraint(min = 0, max = 100)
     public int pingVolume = 100;
     @RangeConstraint(min = 1, max = 15)

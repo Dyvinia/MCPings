@@ -81,7 +81,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
-		String channel = "";
+		String channel = MCPingsClient.CONFIG.pingChannel();
 		PingData.Type pingType = PingData.Type.STANDARD;
 
 		if (hitResult instanceof EntityHitResult entHit) {
@@ -116,7 +116,7 @@ public class MCPingsClient implements ClientModInitializer {
 	}
 
 	private static void onReceivePing(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-		String currentChannel = "";
+		String currentChannel = MCPingsClient.CONFIG.pingChannel();
 
 		String pingChannel = buf.readString();
 		if (!pingChannel.equals(currentChannel)) return;
