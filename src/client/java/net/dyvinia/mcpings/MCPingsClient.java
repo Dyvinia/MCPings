@@ -106,7 +106,7 @@ public class MCPingsClient implements ClientModInitializer {
 		packet.writeDouble(hitResult.getPos().y); // pos y
 		packet.writeDouble(hitResult.getPos().z); // pos z
 
-		if (hitResult.getType() == HitResult.Type.ENTITY) {
+		if (hitResult instanceof EntityHitResult) {
 			packet.writeBoolean(true);
 			packet.writeUuid(((EntityHitResult) hitResult).getEntity().getUuid()); // hit entity uuid
 		}
@@ -119,8 +119,10 @@ public class MCPingsClient implements ClientModInitializer {
 		String currentChannel = "";
 
 		String pingChannel = buf.readString();
+		if (!pingChannel.equals(currentChannel)) return;
+
 		String pingSender = buf.readString();
-		Integer pingTypeOrdinal = buf.readInt();
+		int pingTypeOrdinal = buf.readInt();
 
 		Vec3d pingPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 
@@ -133,7 +135,7 @@ public class MCPingsClient implements ClientModInitializer {
 					new DirectionalSoundInstance(
 							SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(),
 							SoundCategory.MASTER,
-							1f,
+							MCPingsClient.CONFIG.pingVolume() / 100f,
 							1f,
 							0,
 							pingPos
