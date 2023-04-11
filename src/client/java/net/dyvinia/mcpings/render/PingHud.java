@@ -2,7 +2,6 @@ package net.dyvinia.mcpings.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.wispforest.owo.ui.core.Color;
-import net.dyvinia.mcpings.MCPings;
 import net.dyvinia.mcpings.MCPingsClient;
 import net.dyvinia.mcpings.util.PingData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -39,7 +38,7 @@ public class PingHud implements HudRenderCallback {
 
             stack.translate(screenPos.x/uiScale, screenPos.y/uiScale, 0); // stack to ping center
             stack.scale((float) (2/uiScale), (float) (2/uiScale), 1); // constant scale
-            stack.scale(MCPings.CONFIG.pingSizeMult().ordinal() + 1, MCPings.CONFIG.pingSizeMult().ordinal() + 1, 1); // config scale
+            stack.scale(MCPingsClient.CONFIG.pingSizeMult().ordinal() + 1, MCPingsClient.CONFIG.pingSizeMult().ordinal() + 1, 1); // config scale
 
             // scale if ping is far and onscreen
             if (distance > scaleDist && onScreen) stack.scale(0.5f, 0.5f, 1);
@@ -67,7 +66,7 @@ public class PingHud implements HudRenderCallback {
             stack.translate(distanceTextWidth/2, 0, 0); // recenter x
 
             // username text
-            if (MCPings.CONFIG.pingShowUsername()) {
+            if (MCPingsClient.CONFIG.pingShowUsername()) {
                 String nameText = ping.senderName;
                 int nameTextWidth = client.textRenderer.getWidth(nameText);
 
@@ -102,11 +101,11 @@ public class PingHud implements HudRenderCallback {
 
     private Vector4f getPingColor(PingData ping) {
         Color c = switch (ping.pingType) {
-            case STANDARD -> MCPings.CONFIG.pingStandardColor();
-            case MONSTER -> MCPings.CONFIG.pingMonsterColor();
-            case ANGERABLE -> MCPings.CONFIG.pingAngerableColor();
-            case FRIENDLY -> MCPings.CONFIG.pingFriendlyColor();
-            case PLAYER -> MCPings.CONFIG.pingPlayerColor();
+            case STANDARD -> MCPingsClient.CONFIG.pingStandardColor();
+            case MONSTER -> MCPingsClient.CONFIG.pingMonsterColor();
+            case ANGERABLE -> MCPingsClient.CONFIG.pingAngerableColor();
+            case FRIENDLY -> MCPingsClient.CONFIG.pingFriendlyColor();
+            case PLAYER -> MCPingsClient.CONFIG.pingPlayerColor();
         };
         return new Vector4f(c.red(), c.green(), c.blue(), c.alpha());
     }

@@ -1,6 +1,7 @@
 package net.dyvinia.mcpings;
 
 import com.google.common.collect.Iterables;
+import net.dyvinia.mcpings.config.MCPingsConfig;
 import net.dyvinia.mcpings.render.PingHud;
 import net.dyvinia.mcpings.util.DirectionalSoundInstance;
 import net.dyvinia.mcpings.util.MathHelper;
@@ -40,6 +41,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class MCPingsClient implements ClientModInitializer {
+	public static final MCPingsConfig CONFIG = MCPingsConfig.createAndLoad();
+
 	private static final String keysCategory = "mcpings.name";
 	private static KeyBinding keyPing;
 
@@ -74,7 +77,7 @@ public class MCPingsClient implements ClientModInitializer {
 		ClientPlayerEntity cameraEnt = (ClientPlayerEntity) MinecraftClient.getInstance().cameraEntity;
 		HitResult hitResult = RayCasting.traceDirectional(
 				cameraEnt.getRotationVec(tickDelta),
-				tickDelta, 256, cameraEnt.isSneaking(), MCPings.CONFIG.pingHitOnlySolid());
+				tickDelta, 256, cameraEnt.isSneaking(), MCPingsClient.CONFIG.pingHitOnlySolid());
 
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
@@ -160,6 +163,6 @@ public class MCPingsClient implements ClientModInitializer {
 			ping.aliveTime = Math.toIntExact(world.getTime() - ping.spawnTime);
 		}
 
-		pingList.removeIf(p -> p.aliveTime > MCPings.CONFIG.pingDuration() * 20);
+		pingList.removeIf(p -> p.aliveTime > MCPingsClient.CONFIG.pingDuration() * 20);
 	}
 }

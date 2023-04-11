@@ -1,6 +1,6 @@
 package net.dyvinia.mcpings.util;
 
-import net.dyvinia.mcpings.MCPings;
+import net.dyvinia.mcpings.MCPingsClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.sound.SoundCategory;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.random.Random;
 
 public class DirectionalSoundInstance extends MovingSoundInstance {
 
-    private Vec3d pos;
+    private final Vec3d pos;
 
     public DirectionalSoundInstance(SoundEvent soundEvent, SoundCategory soundCategory, Float volume, Float pitch, long seed, Vec3d pos) {
         super(soundEvent, soundCategory, Random.create(seed));
@@ -30,7 +30,7 @@ public class DirectionalSoundInstance extends MovingSoundInstance {
         Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
 
         Vec3d vecBetween = playerPos.relativize(this.pos);
-        double mappedDistance = Math.min(vecBetween.length(), 64.0) / 64.0 * MCPings.CONFIG.pingVolumeFalloff();
+        double mappedDistance = Math.min(vecBetween.length(), 64.0) / 64.0 * MCPingsClient.CONFIG.pingVolumeFalloff();
         Vec3d soundDirection = vecBetween.normalize().multiply(mappedDistance);
         Vec3d soundPos = playerPos.add(soundDirection);
 
