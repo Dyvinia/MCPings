@@ -9,31 +9,47 @@ import io.wispforest.owo.ui.core.Color;
 @Config(name = "mcpings-config", wrapperName = "MCPingsConfig")
 public class MCPingsConfigModel {
 
-    @SectionHeader("main")
+
     public String pingChannel = "";
 
-    @RangeConstraint(min = 0, max = 100)
-    public int pingVolume = 100;
-    @RangeConstraint(min = 1, max = 15)
-    public int pingVolumeFalloff = 10;
+    @Nest
+    @Expanded
+    public AudioNest audioNest = new AudioNest();
 
-    @RangeConstraint(min = 1, max = 16)
-    public int pingDuration = 8;
-
-    public SizeMultiplier pingSizeMult = SizeMultiplier.ONE;
-
-    public enum SizeMultiplier {
-        ONE, TWO, THREE
+    public static class AudioNest {
+        @RangeConstraint(min = 0, max = 100)
+        public int pingVolume = 100;
+        @RangeConstraint(min = 1, max = 15)
+        public int pingVolumeFalloff = 10;
     }
 
-    public boolean pingShowUsername = true;
-    public boolean pingHitOnlySolid = true;
+    @Nest
+    @Expanded
+    public VisualsNest visualsNest = new VisualsNest();
 
+    public static class VisualsNest {
+        @RangeConstraint(min = 1, max = 16)
+        public int pingDuration = 8;
 
-    @SectionHeader("color")
-    public Color pingStandardColor = Color.ofRgb(0xFFFFFF);
-    public Color pingMonsterColor = Color.ofRgb(0xFF5050);
-    public Color pingAngerableColor = Color.ofRgb(0xFFBB55);
-    public Color pingFriendlyColor = Color.ofRgb(0x45FF45);
-    public Color pingPlayerColor = Color.ofRgb(0x45B5FF);
+        public SizeMultiplier pingSizeMult = SizeMultiplier.ONE;
+
+        public enum SizeMultiplier {
+            ONE, TWO, THREE
+        }
+
+        public boolean pingShowUsername = true;
+        public boolean pingHitOnlySolid = true;
+    }
+
+    @Nest
+    @Expanded
+    public ColorNest colorNest = new ColorNest();
+
+    public static class ColorNest {
+        public Color pingStandardColor = Color.ofRgb(0xFFFFFF);
+        public Color pingMonsterColor = Color.ofRgb(0xFF5050);
+        public Color pingAngerableColor = Color.ofRgb(0xFFBB55);
+        public Color pingFriendlyColor = Color.ofRgb(0x45FF45);
+        public Color pingPlayerColor = Color.ofRgb(0x45B5FF);
+    }
 }

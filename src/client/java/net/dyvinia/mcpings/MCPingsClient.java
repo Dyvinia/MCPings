@@ -77,7 +77,7 @@ public class MCPingsClient implements ClientModInitializer {
 		ClientPlayerEntity cameraEnt = (ClientPlayerEntity) MinecraftClient.getInstance().cameraEntity;
 		HitResult hitResult = RayCasting.traceDirectional(
 				cameraEnt.getRotationVec(tickDelta),
-				tickDelta, 256, cameraEnt.isSneaking(), MCPingsClient.CONFIG.pingHitOnlySolid());
+				tickDelta, 256, cameraEnt.isSneaking(), MCPingsClient.CONFIG.visualsNest.pingHitOnlySolid());
 
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
@@ -135,7 +135,7 @@ public class MCPingsClient implements ClientModInitializer {
 					new DirectionalSoundInstance(
 							SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(),
 							SoundCategory.MASTER,
-							MCPingsClient.CONFIG.pingVolume() / 100f,
+							MCPingsClient.CONFIG.audioNest.pingVolume() / 100f,
 							1f,
 							0,
 							pingPos
@@ -165,6 +165,6 @@ public class MCPingsClient implements ClientModInitializer {
 			ping.aliveTime = Math.toIntExact(world.getTime() - ping.spawnTime);
 		}
 
-		pingList.removeIf(p -> p.aliveTime > MCPingsClient.CONFIG.pingDuration() * 20);
+		pingList.removeIf(p -> p.aliveTime > MCPingsClient.CONFIG.visualsNest.pingDuration() * 20);
 	}
 }

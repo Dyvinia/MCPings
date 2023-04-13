@@ -38,7 +38,7 @@ public class PingHud implements HudRenderCallback {
 
             stack.translate(screenPos.x/uiScale, screenPos.y/uiScale, 0); // stack to ping center
             stack.scale((float) (2/uiScale), (float) (2/uiScale), 1); // constant scale
-            stack.scale(MCPingsClient.CONFIG.pingSizeMult().ordinal() + 1, MCPingsClient.CONFIG.pingSizeMult().ordinal() + 1, 1); // config scale
+            stack.scale(MCPingsClient.CONFIG.visualsNest.pingSizeMult().ordinal() + 1, MCPingsClient.CONFIG.visualsNest.pingSizeMult().ordinal() + 1, 1); // config scale
 
             // scale if ping is far and onscreen
             if (distance > scaleDist && onScreen) stack.scale(0.5f, 0.5f, 1);
@@ -60,23 +60,23 @@ public class PingHud implements HudRenderCallback {
             String distanceText = String.format("%.1fm", distance);
             int distanceTextWidth = client.textRenderer.getWidth(distanceText);
 
-            stack.translate(-distanceTextWidth/2, -12, 0);
+            stack.translate(-distanceTextWidth/2f, -12f, 0);
             DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
             client.textRenderer.drawWithShadow(stack, distanceText, 0f, 0f, -1);
-            stack.translate(distanceTextWidth/2, 0, 0); // recenter x
+            stack.translate(distanceTextWidth/2f, 0, 0); // recenter x
 
             // username text
-            if (MCPingsClient.CONFIG.pingShowUsername()) {
+            if (MCPingsClient.CONFIG.visualsNest.pingShowUsername()) {
                 String nameText = ping.senderName;
                 int nameTextWidth = client.textRenderer.getWidth(nameText);
 
                 stack.scale(0.5f, 0.5f, 1f);
                 if (distance > scaleDist) stack.scale(2, 2, 1);
 
-                stack.translate(-nameTextWidth/2, -14, 0);
+                stack.translate(-nameTextWidth/2f, -14f, 0);
                 DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
                 client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, -1);
-                stack.translate(nameTextWidth/2, 0, 0); // recenter x
+                stack.translate(nameTextWidth/2f, 0, 0); // recenter x
             }
 
             // end
@@ -101,11 +101,11 @@ public class PingHud implements HudRenderCallback {
 
     private Vector4f getPingColor(PingData ping) {
         Color c = switch (ping.pingType) {
-            case STANDARD -> MCPingsClient.CONFIG.pingStandardColor();
-            case MONSTER -> MCPingsClient.CONFIG.pingMonsterColor();
-            case ANGERABLE -> MCPingsClient.CONFIG.pingAngerableColor();
-            case FRIENDLY -> MCPingsClient.CONFIG.pingFriendlyColor();
-            case PLAYER -> MCPingsClient.CONFIG.pingPlayerColor();
+            case STANDARD -> MCPingsClient.CONFIG.colorNest.pingStandardColor();
+            case MONSTER -> MCPingsClient.CONFIG.colorNest.pingMonsterColor();
+            case ANGERABLE -> MCPingsClient.CONFIG.colorNest.pingAngerableColor();
+            case FRIENDLY -> MCPingsClient.CONFIG.colorNest.pingFriendlyColor();
+            case PLAYER -> MCPingsClient.CONFIG.colorNest.pingPlayerColor();
         };
         return new Vector4f(c.red(), c.green(), c.blue(), c.alpha());
     }
