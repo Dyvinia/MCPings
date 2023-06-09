@@ -61,12 +61,12 @@ public class PingHud implements HudRenderCallback {
             int distanceTextWidth = client.textRenderer.getWidth(distanceText);
 
             stack.translate(-distanceTextWidth/2f, -12f, 0);
-            context.fill( -2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
+            context.fill(-2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
             context.drawTextWithShadow(client.textRenderer, distanceText, 0, 0, -1);
             stack.translate(distanceTextWidth/2f, 0, 0); // recenter x
 
             // username text
-            if (MCPingsClient.CONFIG.visualsNest.pingShowUsername()) {
+            if (MCPingsClient.CONFIG.visualsNest.pingShowUsername() && !isScreenCenter(ping.screenPos, 32, client.getWindow())) {
                 String nameText = ping.senderName;
                 int nameTextWidth = client.textRenderer.getWidth(nameText);
 
@@ -97,6 +97,16 @@ public class PingHud implements HudRenderCallback {
         else if (newScreenPos.y < margin) newScreenPos = new Vector4f(newScreenPos.x, margin, newScreenPos.z, newScreenPos.w);
 
         return newScreenPos;
+    }
+
+    private boolean isScreenCenter(Vector4f screenPos, int margin, Window wnd) {
+        int width = wnd.getWidth();
+        int height = wnd.getHeight();
+
+        boolean isHorizontalCenter = screenPos.x > (width/2 - margin) && screenPos.x < (width/2 + margin);
+        boolean isVerticalCenter = screenPos.y > (height/2 - margin) && screenPos.y < (height/2 + margin);
+
+        return isHorizontalCenter && isVerticalCenter;
     }
 
     private Vector4f getPingColor(PingData ping) {
