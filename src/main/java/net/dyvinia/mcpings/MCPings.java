@@ -23,7 +23,7 @@ public class MCPings implements ModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_PING, (server, player, handler, buf, responseSender) -> {
 			PacketByteBuf packet = PacketByteBufs.copy(buf);
 
-			for (ServerPlayerEntity p : PlayerLookup.world(player.getWorld())) {
+			for (ServerPlayerEntity p : PlayerLookup.world(player.getServerWorld())) {
 				ServerPlayNetworking.send(p, S2C_PING, packet);
 			}
 		});

@@ -20,7 +20,7 @@ public class RayCasting {
         double minDist = min.squaredDistanceTo(max);
         EntityHitResult minHitResult = null;
 
-        for (Entity ent : entity.world.getOtherEntities(entity, box, predicate)) {
+        for (Entity ent : entity.getWorld().getOtherEntities(entity, box, predicate)) {
             Box targetBoundingBox = ent.getBoundingBox().expand(ent.getTargetingMargin()).expand(0.25);
             Optional<Vec3d> hitPos = targetBoundingBox.raycast(min, max);
 
@@ -41,7 +41,7 @@ public class RayCasting {
     public static HitResult traceDirectional(Vec3d direction, float tickDelta, double maxDistance, boolean hitFluids, boolean hitOnlySolid) {
         Entity cameraEnt = MinecraftClient.getInstance().cameraEntity;
 
-        if (cameraEnt == null || cameraEnt.world == null) {
+        if (cameraEnt == null || cameraEnt.getWorld() == null) {
             return null;
         }
 
@@ -51,7 +51,7 @@ public class RayCasting {
                 .stretch(cameraEnt.getRotationVec(1.0f).multiply(maxDistance))
                 .expand(1.0, 1.0, 1.0);
 
-        BlockHitResult blockHitResult = cameraEnt.world.raycast(
+        BlockHitResult blockHitResult = cameraEnt.getWorld().raycast(
                 new RaycastContext(
                         rayStartVec,
                         rayEndVec,

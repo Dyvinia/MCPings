@@ -6,7 +6,7 @@ import net.dyvinia.mcpings.MCPingsClient;
 import net.dyvinia.mcpings.util.PingData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,8 +20,9 @@ public class PingHud implements HudRenderCallback {
     private static final Identifier PING_STANDARD = new Identifier("mcpings", "textures/ping_standard.png");
 
     @Override
-    public void onHudRender(MatrixStack stack, float tickDelta) {
+    public void onHudRender(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
+        MatrixStack stack = context.getMatrices();
         double uiScale = client.getWindow().getScaleFactor();
         Vec3d cameraPosVec = client.player.getCameraPosVec(tickDelta);
         int scaleDist = 10;
@@ -46,8 +47,7 @@ public class PingHud implements HudRenderCallback {
             // draw ping icon
             RenderSystem.setShader(GameRenderer::getPositionTexProgram);
             RenderSystem.setShaderColor(pingColor.x, pingColor.y, pingColor.z, pingColor.w);
-            RenderSystem.setShaderTexture(0, PING_STANDARD);
-            DrawableHelper.drawTexture(stack, -4, -2, 0, 0, 8, 8, 8, 8);
+            context.drawTexture(PING_STANDARD, -4, -2, 0, 0, 8, 8, 8, 8);
 
             // skip drawing text if ping not on screen
             if (!onScreen) {
@@ -61,8 +61,8 @@ public class PingHud implements HudRenderCallback {
             int distanceTextWidth = client.textRenderer.getWidth(distanceText);
 
             stack.translate(-distanceTextWidth/2f, -12f, 0);
-            DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
-            client.textRenderer.drawWithShadow(stack, distanceText, 0f, 0f, -1);
+            context.fill( -2, -2, client.textRenderer.getWidth(distanceText) + 1, client.textRenderer.fontHeight, shadowBlack);
+            context.drawTextWithShadow(client.textRenderer, distanceText, 0, 0, -1);
             stack.translate(distanceTextWidth/2f, 0, 0); // recenter x
 
             // username text
@@ -70,12 +70,12 @@ public class PingHud implements HudRenderCallback {
                 String nameText = ping.senderName;
                 int nameTextWidth = client.textRenderer.getWidth(nameText);
 
-                stack.scale(0.5f, 0.5f, 1f);
+                stack.scale(0.51f, 0.51f, 1f);
                 if (distance > scaleDist) stack.scale(2, 2, 1);
 
                 stack.translate(-nameTextWidth/2f, -14f, 0);
-                DrawableHelper.fill(stack, -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
-                client.textRenderer.drawWithShadow(stack, nameText, 0f, 0f, -1);
+                context.fill( -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
+                context.drawTextWithShadow(client.textRenderer, nameText, 0, 0, -1);
                 stack.translate(nameTextWidth/2f, 0, 0); // recenter x
             }
 
