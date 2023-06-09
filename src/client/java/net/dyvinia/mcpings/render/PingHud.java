@@ -103,8 +103,8 @@ public class PingHud implements HudRenderCallback {
         int width = wnd.getWidth();
         int height = wnd.getHeight();
 
-        boolean isHorizontalCenter = screenPos.x > (width/2 - margin) && screenPos.x < (width/2 + margin);
-        boolean isVerticalCenter = screenPos.y > (height/2 - margin) && screenPos.y < (height/2 + margin);
+        boolean isHorizontalCenter = screenPos.x > (width/2f - margin) && screenPos.x < (width/2f + margin);
+        boolean isVerticalCenter = screenPos.y > (height/2f - margin) && screenPos.y < (height/2f + margin);
 
         return isHorizontalCenter && isVerticalCenter;
     }
