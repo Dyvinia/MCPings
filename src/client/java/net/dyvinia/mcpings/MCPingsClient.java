@@ -64,7 +64,7 @@ public class MCPingsClient implements ClientModInitializer {
 			}
 		});
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			//ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create());
+			ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create());
 		});
 
 		HudRenderCallback.EVENT.register(new PingHud());
