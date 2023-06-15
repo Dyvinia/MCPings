@@ -55,7 +55,7 @@ public class MCPingsClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		MCPings.LOGGER.info("Client Init");
 
-		keyPing = KeyBindingHelper.registerKeyBinding(new KeyBinding("mcpings.key.mark-location", InputUtil.Type.MOUSE, GLFW.GLFW_MOUSE_BUTTON_3, keysCategory));
+		keyPing = KeyBindingHelper.registerKeyBinding(new KeyBinding("mcpings.key.mark-location", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_GRAVE_ACCENT, keysCategory));
 
 		ClientPlayNetworking.registerGlobalReceiver(MCPings.S2C_PING, MCPingsClient::onReceivePing);
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -63,9 +63,8 @@ public class MCPingsClient implements ClientModInitializer {
 				markLoc();
 			}
 		});
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-			ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create());
-		});
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
+				ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create()));
 
 		HudRenderCallback.EVENT.register(new PingHud());
 	}
