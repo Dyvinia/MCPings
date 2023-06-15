@@ -66,7 +66,7 @@ public class PingHud implements HudRenderCallback {
             stack.translate(distanceTextWidth/2f, 0, 0); // recenter x
 
             // username text
-            if (MCPingsClient.CONFIG.visualsNest.pingShowUsername() && !isScreenCenter(ping.screenPos, 32, client.getWindow())) {
+            if (MCPingsClient.CONFIG.visualsNest.pingShowUsername() && !isScreenCenter(ping.screenPos, 48, client.getWindow())) {
                 String nameText = ping.senderName;
                 int nameTextWidth = client.textRenderer.getWidth(nameText);
 
@@ -74,7 +74,7 @@ public class PingHud implements HudRenderCallback {
                 if (distance > scaleDist) stack.scale(2, 2, 1);
 
                 stack.translate(-nameTextWidth/2f, -14f, 0);
-                context.fill( -2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
+                context.fill(-2, -2, client.textRenderer.getWidth(nameText) + 1, client.textRenderer.fontHeight, shadowBlack);
                 context.drawTextWithShadow(client.textRenderer, nameText, 0, 0, -1);
                 stack.translate(nameTextWidth/2f, 0, 0); // recenter x
             }
