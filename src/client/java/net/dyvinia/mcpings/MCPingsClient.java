@@ -10,6 +10,7 @@ import net.dyvinia.mcpings.util.RayCasting;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -62,6 +63,9 @@ public class MCPingsClient implements ClientModInitializer {
 				markLoc();
 			}
 		});
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			//ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create());
+		});
 
 		HudRenderCallback.EVENT.register(new PingHud());
 	}
@@ -98,13 +102,13 @@ public class MCPingsClient implements ClientModInitializer {
 
 		PacketByteBuf packet = PacketByteBufs.create(); // create packet
 
-		packet.writeString(channel); // channel
-		packet.writeString(username); // sender's username
-		packet.writeInt(pingType.ordinal()); // ping type
-
 		packet.writeDouble(hitResult.getPos().x); // pos x
 		packet.writeDouble(hitResult.getPos().y); // pos y
 		packet.writeDouble(hitResult.getPos().z); // pos z
+
+		packet.writeString(channel); // channel
+		packet.writeString(username); // sender's username
+		packet.writeInt(pingType.ordinal()); // ping type
 
 		if (hitResult instanceof EntityHitResult) {
 			packet.writeBoolean(true);
@@ -118,13 +122,13 @@ public class MCPingsClient implements ClientModInitializer {
 	private static void onReceivePing(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
 		String currentChannel = MCPingsClient.CONFIG.pingChannel();
 
+		Vec3d pingPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+
 		String pingChannel = buf.readString();
 		if (!pingChannel.equals(currentChannel)) return;
 
 		String pingSender = buf.readString();
 		int pingTypeOrdinal = buf.readInt();
-
-		Vec3d pingPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 
 		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
 
