@@ -18,6 +18,9 @@
   "text.config.mcpings-config.option.visualsNest.pingDuration": "Ping Duration",
   "text.config.mcpings-config.option.visualsNest.pingDuration.tooltip": "Controls how long pings will stay",
 
+  "text.config.mcpings-config.option.visualsNest.pingDistance": "Maximum Ping Distance",
+  "text.config.mcpings-config.option.visualsNest.pingDistance.tooltip": "Pings past this distance will not be shown",
+
   "text.config.mcpings-config.option.visualsNest.pingSizeMult": "Ping Size",
   "text.config.mcpings-config.option.visualsNest.pingSizeMult.tooltip": "Multiplier for Ping's size",
 

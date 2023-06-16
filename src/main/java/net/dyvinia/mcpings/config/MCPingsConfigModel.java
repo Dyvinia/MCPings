@@ -31,6 +31,8 @@ public class MCPingsConfigModel {
         @RangeConstraint(min = 1, max = 16)
         public int pingDuration = 8;
 
+        public int pingDistance = 256;
+
         public SizeMultiplier pingSizeMult = SizeMultiplier.ONE;
 
         public enum SizeMultiplier {
