@@ -37,12 +37,6 @@ public class PingHud implements HudRenderCallback {
             Vector4f screenPos = screenPosWindowed(ping.screenPos, 16, client.getWindow());
             boolean onScreen = screenPos == ping.screenPos;
 
-            // Max Ping Distance
-            if (distance > MCPingsClient.CONFIG.visualsNest.pingDistance()) {
-                stack.pop();
-                continue;
-            }
-
             stack.translate(screenPos.x/uiScale, screenPos.y/uiScale, 0); // stack to ping center
             stack.scale((float) (2/uiScale), (float) (2/uiScale), 1); // constant scale
             stack.scale(MCPingsClient.CONFIG.visualsNest.pingSizeMult().ordinal() + 1, MCPingsClient.CONFIG.visualsNest.pingSizeMult().ordinal() + 1, 1); // config scale

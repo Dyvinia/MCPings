@@ -50,7 +50,7 @@ public class MCPingsClient implements ClientModInitializer {
 	public static List<PingData> pingList = new ArrayList<>();
 	private static boolean queuePing = false;
 
-	private final int cooldown = 8;
+	private final int cooldown = 6;
 	private static int cooldownCounter = 0;
 
 
@@ -132,6 +132,10 @@ public class MCPingsClient implements ClientModInitializer {
 
 		String pingChannel = buf.readString();
 		if (!pingChannel.equals(currentChannel)) return;
+
+		// Max Ping Distance
+		if (client.player.getPos().distanceTo(pingPos) > MCPingsClient.CONFIG.visualsNest.pingDistance())
+			return;
 
 		String pingSender = buf.readString();
 		int pingTypeOrdinal = buf.readInt();
