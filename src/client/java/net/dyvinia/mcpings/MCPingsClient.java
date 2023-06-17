@@ -50,6 +50,9 @@ public class MCPingsClient implements ClientModInitializer {
 	public static List<PingData> pingList = new ArrayList<>();
 	private static boolean queuePing = false;
 
+	private final int cooldown = 8;
+	private static int cooldownCounter = 0;
+
 
 	@Override
 	public void onInitializeClient() {
@@ -59,8 +62,12 @@ public class MCPingsClient implements ClientModInitializer {
 
 		ClientPlayNetworking.registerGlobalReceiver(MCPings.S2C_PING, MCPingsClient::onReceivePing);
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (keyPing.wasPressed()) {
+			if (keyPing.wasPressed() && cooldownCounter >= cooldown) {
 				markLoc();
+				cooldownCounter = 0;
+			}
+			else if (cooldownCounter < cooldown) {
+				cooldownCounter++;
 			}
 		});
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
