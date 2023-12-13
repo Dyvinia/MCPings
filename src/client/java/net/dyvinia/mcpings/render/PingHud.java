@@ -49,6 +49,10 @@ public class PingHud implements HudRenderCallback {
             RenderSystem.setShaderColor(pingColor.x, pingColor.y, pingColor.z, pingColor.w);
             context.drawTexture(PING_STANDARD, -4, -2, 0, 0, 8, 8, 8, 8);
 
+            // reset color if text coloring is disabled
+            if (!MCPingsClient.CONFIG.visualsNest.pingColorText())
+                RenderSystem.setShaderColor(1, 1, 1, 1);
+
             // skip drawing text if ping not on screen
             if (!onScreen) {
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);

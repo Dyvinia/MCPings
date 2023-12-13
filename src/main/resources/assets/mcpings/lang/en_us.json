@@ -34,6 +34,9 @@
   "text.config.mcpings-config.option.visualsNest.pingHitOnlySolid": "Only Ping Solid Blocks",
   "text.config.mcpings-config.option.visualsNest.pingHitOnlySolid.tooltip": "When enabled, pings will go through blocks like tall grass and saplings",
 
+  "text.config.mcpings-config.option.visualsNest.pingColorText": "Color Text",
+  "text.config.mcpings-config.option.visualsNest.pingColorText.tooltip": "When enabled, text above pings will share the same color as the icon. Otherwise text will be white",
+
   "text.config.mcpings-config.category.colorNest": "Colors",
 
   "text.config.mcpings-config.option.colorNest.pingStandardColor": "Standard Ping Color",

@@ -41,6 +41,7 @@ public class MCPingsConfigModel {
 
         public boolean pingShowUsername = true;
         public boolean pingHitOnlySolid = true;
+        public boolean pingColorText = true;
     }
 
     @Nest
