@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://github.com/Dyvinia/MCPings",
-		"sources": "https://github.com/Dyvinia/MCPings.git"
+		"sources": "https://github.com/Dyvinia/MCPings.git",
+		"issues": "https://github.com/Dyvinia/MCPings/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/mcpings/icon.png",
