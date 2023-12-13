@@ -3,7 +3,7 @@
 	"id": "mcpings",
 	"version": "${version}",
 	"name": "MCPings",
-	"description": "Adds pinging locations to Minecraft. Based on MinecraftPingWheel by LukenSkyne",
+	"description": "Adds a location pinging system to Minecraft. Based on MinecraftPingWheel by LukenSkyne",
 	"authors": [
 		"Dyvinia"
 	],
