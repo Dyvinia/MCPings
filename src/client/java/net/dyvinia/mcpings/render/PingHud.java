@@ -28,6 +28,8 @@ public class PingHud implements HudRenderCallback {
         int scaleDist = 10;
 
         for (PingData ping : MCPingsClient.pingList) {
+            if (ping.screenPos == null) continue;
+
             stack.push();
 
             Vector4f pingColor = getPingColor(ping);
