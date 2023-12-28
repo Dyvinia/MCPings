@@ -33,6 +33,8 @@ public class MCPingsConfigModel {
 
         public int pingDistance = 256;
 
+        public int pingSourceDistance = 64;
+
         public SizeMultiplier pingSizeMult = SizeMultiplier.ONE;
 
         public enum SizeMultiplier {

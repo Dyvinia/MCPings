@@ -50,7 +50,7 @@ public class MCPingsClient implements ClientModInitializer {
 	public static List<PingData> pingList = new ArrayList<>();
 	private static boolean queuePing = false;
 
-	private final int cooldown = 6;
+	private final int cooldown = 10;
 	private static int cooldownCounter = 0;
 
 
@@ -91,6 +91,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		if (hitResult == null || hitResult.getType() == HitResult.Type.MISS) return;
 		String username = cameraEnt.getGameProfile().getName();
+		UUID uuid = cameraEnt.getGameProfile().getId();
 		String channel = MCPingsClient.CONFIG.pingChannel();
 		PingData.Type pingType = PingData.Type.STANDARD;
 
@@ -114,6 +115,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		packet.writeString(channel); // channel
 		packet.writeString(username); // sender's username
+		packet.writeUuid(uuid); // sender's uuid
 		packet.writeInt(pingType.ordinal()); // ping type
 
 		if (hitResult instanceof EntityHitResult) {
@@ -138,12 +140,18 @@ public class MCPingsClient implements ClientModInitializer {
 			return;
 
 		String pingSender = buf.readString();
+		UUID pingSenderId = buf.readUuid();
+
+		Entity pingSenderEnt = Iterables.tryFind(client.world.getEntities(), entity -> entity.getUuid().equals(pingSenderId)).orNull();
+		if (pingSenderEnt != null && client.player.getPos().distanceTo(pingSenderEnt.getPos()) >= MCPingsClient.CONFIG.visualsNest.pingSourceDistance())
+			return;
+
 		int pingTypeOrdinal = buf.readInt();
 
 		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
 
 		client.execute(() -> {
-			pingList.add(new PingData(pingSender, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime()));
+			pingList.add(new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime()));
 
 			client.getSoundManager().play(
 					new DirectionalSoundInstance(

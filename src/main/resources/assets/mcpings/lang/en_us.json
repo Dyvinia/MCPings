@@ -21,6 +21,9 @@
   "text.config.mcpings-config.option.visualsNest.pingDistance": "Maximum Ping Distance",
   "text.config.mcpings-config.option.visualsNest.pingDistance.tooltip": "Pings past this distance will not be shown",
 
+  "text.config.mcpings-config.option.visualsNest.pingSourceDistance": "Maximum Ping Source Distance",
+  "text.config.mcpings-config.option.visualsNest.pingSourceDistance.tooltip": "Pings sent by players past this distance will not be shown",
+
   "text.config.mcpings-config.option.visualsNest.pingSizeMult": "Ping Size",
   "text.config.mcpings-config.option.visualsNest.pingSizeMult.tooltip": "Multiplier for Ping's size",
 

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class PingData {
     public String senderName;
+    public UUID senderId;
     public Type pingType;
     public Vec3d pos;
     public Vector4f screenPos;
@@ -18,8 +19,9 @@ public class PingData {
     public Integer aliveTime;
 
 
-    public PingData(String senderName, Type pingType, Vec3d pos, UUID hitEntity, long spawnTime) {
+    public PingData(String senderName, UUID senderId, Type pingType, Vec3d pos, UUID hitEntity, long spawnTime) {
         this.senderName = senderName;
+        this.senderId = senderId;
         this.pingType = pingType;
         this.pos = pos;
         this.hitEntity = hitEntity;
