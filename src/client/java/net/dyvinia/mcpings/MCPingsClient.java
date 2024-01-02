@@ -142,7 +142,7 @@ public class MCPingsClient implements ClientModInitializer {
 		String pingSender = buf.readString();
 		UUID pingSenderId = buf.readUuid();
 
-		Entity pingSenderEnt = Iterables.tryFind(client.world.getEntities(), entity -> entity.getUuid().equals(pingSenderId)).orNull();
+		PlayerEntity pingSenderEnt = client.world.getPlayerByUuid(pingSenderId);
 		if (pingSenderEnt != null && client.player.getPos().distanceTo(pingSenderEnt.getPos()) >= MCPingsClient.CONFIG.visualsNest.pingSourceDistance())
 			return;
 
