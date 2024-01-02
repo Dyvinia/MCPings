@@ -55,7 +55,7 @@ public class RayCasting {
                 new RaycastContext(
                         rayStartVec,
                         rayEndVec,
-                        hitOnlySolid ? RaycastContext.ShapeType.COLLIDER : RaycastContext.ShapeType.OUTLINE,
+                        hitOnlySolid ? RaycastContext.ShapeType.VISUAL : RaycastContext.ShapeType.OUTLINE,
                         hitFluids ? RaycastContext.FluidHandling.ANY : RaycastContext.FluidHandling.NONE,
                         cameraEnt
                 )
