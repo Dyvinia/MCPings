@@ -151,18 +151,10 @@ public class MCPingsClient implements ClientModInitializer {
 		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
 
 		client.execute(() -> {
-			pingList.add(new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime()));
+			PingData ping = new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime());
 
-			client.getSoundManager().play(
-					new DirectionalSoundInstance(
-							SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(),
-							SoundCategory.MASTER,
-							MCPingsClient.CONFIG.audioNest.pingVolume() / 100f,
-							1f,
-							0,
-							pingPos
-					)
-			);
+			pingList.add(ping);
+			playPingSound(client, ping);
 		});
 	}
 
@@ -188,5 +180,18 @@ public class MCPingsClient implements ClientModInitializer {
 		}
 
 		pingList.removeIf(p -> p.aliveTime > MCPingsClient.CONFIG.visualsNest.pingDuration() * 20);
+	}
+	
+	public static void playPingSound(MinecraftClient client, PingData ping) {
+		client.getSoundManager().play(
+				new DirectionalSoundInstance(
+						SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(),
+						SoundCategory.MASTER,
+						MCPingsClient.CONFIG.audioNest.pingVolume() / 100f,
+						1f,
+						0,
+						ping.pos
+				)
+		);
 	}
 }
