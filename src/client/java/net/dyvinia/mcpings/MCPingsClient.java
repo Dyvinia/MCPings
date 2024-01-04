@@ -1,6 +1,7 @@
 package net.dyvinia.mcpings;
 
 import com.google.common.collect.Iterables;
+import io.wispforest.owo.config.ui.ConfigScreen;
 import net.dyvinia.mcpings.config.MCPingsConfig;
 import net.dyvinia.mcpings.render.PingHud;
 import net.dyvinia.mcpings.util.DirectionalSoundInstance;
@@ -8,6 +9,8 @@ import net.dyvinia.mcpings.util.MathHelper;
 import net.dyvinia.mcpings.util.PingData;
 import net.dyvinia.mcpings.util.RayCasting;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -15,6 +18,8 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -31,6 +36,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
@@ -72,6 +78,18 @@ public class MCPingsClient implements ClientModInitializer {
 		});
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
 				ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create()));
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+			dispatcher.register(ClientCommandManager.literal("mcpings").executes(context -> {
+				context.getSource().sendFeedback(Text.literal("MCPings v" + FabricLoader.getInstance().getModContainer("mcpings")
+						.map(container -> container.getMetadata().getVersion().getFriendlyString()).orElse("1.0.0")));
+				return 1; // idk what the return values mean
+			}).then(ClientCommandManager.literal("config").executes(context -> {
+				ConfigScreen screen = ConfigScreen.create(MCPingsClient.CONFIG, null);
+				MinecraftClient.getInstance().send(() -> MinecraftClient.getInstance().setScreen(screen));
+				return 0;
+			}))
+		));
 
 		HudRenderCallback.EVENT.register(new PingHud());
 	}
