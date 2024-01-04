@@ -14,8 +14,8 @@ public class MCPings implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("mcpings");
 
 	public static final Identifier C2S_JOIN = new Identifier("mcpings-c2s:join");
-	public static final Identifier C2S_PING = new Identifier("mcpings-c2s:ping");
-	public static final Identifier S2C_PING = new Identifier("mcpings-s2c:ping");
+	public static final Identifier C2S_PING = new Identifier("mcpings-c2s:ping-v2");
+	public static final Identifier S2C_PING = new Identifier("mcpings-s2c:ping-v2");
 
 	@Override
 	public void onInitialize() {
