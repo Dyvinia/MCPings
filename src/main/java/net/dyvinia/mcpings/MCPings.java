@@ -1,5 +1,6 @@
 package net.dyvinia.mcpings;
 
+import net.dyvinia.mcpings.network.JoinPayload;
 import net.dyvinia.mcpings.network.PingPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -22,9 +23,8 @@ public class MCPings implements ModInitializer {
 	public static final String VERSION_STRING = FabricLoader.getInstance().getModContainer("mcpings")
 			.map(container -> container.getMetadata().getVersion().getFriendlyString()).orElse("1.0.0");
 
-	public static final Identifier C2S_JOIN = Identifier.of("mcpings-c2s:join");
+	public static final Identifier JOIN = Identifier.of("mcpings:join");
 	public static final Identifier PING = Identifier.of("mcpings:ping");
-	//public static final Identifier S2C_PING = Identifier.of("mcpings-s2c:ping");
 
 	private final List<ServerPlayerEntity> moddedPlayers = new ArrayList<>();
 
@@ -33,14 +33,22 @@ public class MCPings implements ModInitializer {
 		LOGGER.info("Server Init");
 
 		PayloadTypeRegistry.playS2C().register(PingPayload.ID, PingPayload.CODEC);
-		PayloadTypeRegistry.playC2S().register(PingPayload.ID, PingPayload.CODEC);
 
-		//c2s
+		PayloadTypeRegistry.playC2S().register(PingPayload.ID, PingPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(JoinPayload.ID, JoinPayload.CODEC);
+
 		ServerPlayNetworking.registerGlobalReceiver(PingPayload.ID, (payload, context) -> {
-			//PacketByteBuf packet = PacketByteBufs.copy(buf);
+			// clean list
+			moddedPlayers.removeIf(p -> !PlayerLookup.all(context.server()).contains(p));
+
+			// send ping to modded players
 			for (ServerPlayerEntity p : PlayerLookup.world(context.player().getServerWorld())) {
-				ServerPlayNetworking.send(p, payload);
+				if (moddedPlayers.contains(p)) {
+					ServerPlayNetworking.send(p, payload);
+				}
 			}
 		});
+
+		ServerPlayNetworking.registerGlobalReceiver(JoinPayload.ID, (payload, context) -> moddedPlayers.add(context.player()));
 	}
 }

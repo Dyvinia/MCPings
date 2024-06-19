@@ -3,6 +3,7 @@ package net.dyvinia.mcpings;
 import com.google.common.collect.Iterables;
 import io.wispforest.owo.config.ui.ConfigScreen;
 import net.dyvinia.mcpings.config.MCPingsConfig;
+import net.dyvinia.mcpings.network.JoinPayload;
 import net.dyvinia.mcpings.network.PingPayload;
 import net.dyvinia.mcpings.render.PingHud;
 import net.dyvinia.mcpings.util.DirectionalSoundInstance;
@@ -77,13 +78,12 @@ public class MCPingsClient implements ClientModInitializer {
 			else if (cooldownCounter < COOLDOWN) {
 				cooldownCounter++;
 			}
-		});/*
+		});
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
 			PacketByteBuf packet = PacketByteBufs.create(); // create packet
 			packet.writeString(MCPings.VERSION_STRING);
-			ClientPlayNetworking.send(MCPings.C2S_JOIN, packet);
-		});*/
-
+			ClientPlayNetworking.send(new JoinPayload(MCPings.VERSION_STRING));
+		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
 			dispatcher.register(ClientCommandManager.literal("mcpings").executes(context -> {
