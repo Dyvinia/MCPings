@@ -130,25 +130,27 @@ public class MCPingsClient implements ClientModInitializer {
 			else if (ent instanceof MobEntity)
 				pingType = PingData.Type.FRIENDLY;
 		}
-
-		PacketByteBuf packet = PacketByteBufs.create(); // create packet
-
-		PingPayload payload = new PingPayload(hitResult.getPos().toVector3f(), channel, username, uuid, pingType.ordinal());
-
-		packet.writeDouble(hitResult.getPos().x); // pos x
-		packet.writeDouble(hitResult.getPos().y); // pos y
-		packet.writeDouble(hitResult.getPos().z); // pos z
-
-		packet.writeString(channel); // channel
-		packet.writeString(username); // sender's username
-		packet.writeUuid(uuid); // sender's uuid
-		packet.writeInt(pingType.ordinal()); // ping type
-
+		PingPayload payload;
 		if (hitResult instanceof EntityHitResult) {
-			packet.writeBoolean(true);
-			packet.writeUuid(((EntityHitResult) hitResult).getEntity().getUuid()); // hit entity uuid
+			payload = new PingPayload(
+					hitResult.getPos().toVector3f(),
+					channel,
+					username,
+					uuid,
+					pingType.ordinal(),
+					((EntityHitResult) hitResult).getEntity().getUuid()
+			);
 		}
-		else packet.writeBoolean(false);
+		else {
+			payload = new PingPayload(
+					hitResult.getPos().toVector3f(),
+					channel,
+					username,
+					uuid,
+					pingType.ordinal(),
+					new UUID(0, 0)
+			);
+		}
 
 		ClientPlayNetworking.send(payload);
 	}
@@ -174,8 +176,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		int pingTypeOrdinal = payload.type();
 
-		//UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
-		UUID pingEntity = null;
+		UUID pingEntity = payload.hitEntity();
 
 		context.client().execute(() -> {
 			PingData ping = new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, context.client().world.getTime());
@@ -191,7 +192,7 @@ public class MCPingsClient implements ClientModInitializer {
 		processPing(tickDelta);
 
 		for (PingData ping : pingList) {
-			if (ping.hitEntity != null) {
+			if (!ping.hitEntity.equals(new UUID(0, 0))) {
 				Entity ent = Iterables.tryFind(world.getEntities(), entity -> entity.getUuid().equals(ping.hitEntity)).orNull();
 				if (ent != null) {
 					if (ent instanceof ItemEntity itemEnt) {

@@ -16,7 +16,8 @@ public record PingPayload(
         String channel,
         String username,
         UUID uuid,
-        int type
+        int type,
+        UUID hitEntity
 ) implements CustomPayload {
     public static final CustomPayload.Id<PingPayload> ID = new CustomPayload.Id<>(MCPings.PING);
 
@@ -26,6 +27,7 @@ public record PingPayload(
             PacketCodecs.STRING, PingPayload::username,
             Uuids.PACKET_CODEC, PingPayload::uuid,
             PacketCodecs.INTEGER, PingPayload::type,
+            Uuids.PACKET_CODEC, PingPayload::hitEntity,
             PingPayload::new
     );
 
