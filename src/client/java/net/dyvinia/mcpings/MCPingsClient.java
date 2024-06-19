@@ -3,6 +3,7 @@ package net.dyvinia.mcpings;
 import com.google.common.collect.Iterables;
 import io.wispforest.owo.config.ui.ConfigScreen;
 import net.dyvinia.mcpings.config.MCPingsConfig;
+import net.dyvinia.mcpings.network.PingPayload;
 import net.dyvinia.mcpings.render.PingHud;
 import net.dyvinia.mcpings.util.DirectionalSoundInstance;
 import net.dyvinia.mcpings.util.MathHelper;
@@ -16,10 +17,10 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -41,6 +42,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public class MCPingsClient implements ClientModInitializer {
 
 		keyPing = KeyBindingHelper.registerKeyBinding(new KeyBinding("mcpings.key.mark-location", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_GRAVE_ACCENT, keysCategory));
 
-		ClientPlayNetworking.registerGlobalReceiver(MCPings.S2C_PING, MCPingsClient::onReceivePing);
+		ClientPlayNetworking.registerGlobalReceiver(PingPayload.ID, MCPingsClient::onReceivePing);
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if ((keyPing.wasPressed() || keyPing.isPressed()) && cooldownCounter >= COOLDOWN) {
 				markLoc();
@@ -75,9 +77,13 @@ public class MCPingsClient implements ClientModInitializer {
 			else if (cooldownCounter < COOLDOWN) {
 				cooldownCounter++;
 			}
-		});
-		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
-				ClientPlayNetworking.send(MCPings.C2S_JOIN, PacketByteBufs.create()));
+		});/*
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			PacketByteBuf packet = PacketByteBufs.create(); // create packet
+			packet.writeString(MCPings.VERSION_STRING);
+			ClientPlayNetworking.send(MCPings.C2S_JOIN, packet);
+		});*/
+
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
 			dispatcher.register(ClientCommandManager.literal("mcpings").executes(context -> {
@@ -127,6 +133,8 @@ public class MCPingsClient implements ClientModInitializer {
 
 		PacketByteBuf packet = PacketByteBufs.create(); // create packet
 
+		PingPayload payload = new PingPayload(hitResult.getPos().toVector3f(), channel, username, uuid, pingType.ordinal());
+
 		packet.writeDouble(hitResult.getPos().x); // pos x
 		packet.writeDouble(hitResult.getPos().y); // pos y
 		packet.writeDouble(hitResult.getPos().z); // pos z
@@ -142,43 +150,43 @@ public class MCPingsClient implements ClientModInitializer {
 		}
 		else packet.writeBoolean(false);
 
-		ClientPlayNetworking.send(MCPings.C2S_PING, packet);
+		ClientPlayNetworking.send(payload);
 	}
 
-	private static void onReceivePing(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+	private static void onReceivePing(PingPayload payload, ClientPlayNetworking.Context context) {
 		String currentChannel = MCPingsClient.CONFIG.pingChannel();
 
-		Vec3d pingPos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+		Vec3d pingPos = new Vec3d(payload.pos());
 
-		String pingChannel = buf.readString();
+		String pingChannel = payload.channel();
 		if (!pingChannel.equals(currentChannel)) return;
 
 		// Max Ping Distance
-		if (client.player.getPos().distanceTo(pingPos) > MCPingsClient.CONFIG.visualsNest.pingDistance())
+		if (context.player().getPos().distanceTo(pingPos) > MCPingsClient.CONFIG.visualsNest.pingDistance())
 			return;
 
-		String pingSender = buf.readString();
-		UUID pingSenderId = buf.readUuid();
+		String pingSender = payload.username();
+		UUID pingSenderId = payload.uuid();
 
-		PlayerEntity pingSenderEnt = client.world.getPlayerByUuid(pingSenderId);
-		if (pingSenderEnt != null && client.player.getPos().distanceTo(pingSenderEnt.getPos()) >= MCPingsClient.CONFIG.visualsNest.pingSourceDistance())
+		PlayerEntity pingSenderEnt = context.client().world.getPlayerByUuid(pingSenderId);
+		if (pingSenderEnt != null && context.player().getPos().distanceTo(pingSenderEnt.getPos()) >= MCPingsClient.CONFIG.visualsNest.pingSourceDistance())
 			return;
 
-		int pingTypeOrdinal = buf.readInt();
+		int pingTypeOrdinal = payload.type();
 
-		UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
+		//UUID pingEntity = buf.readBoolean() ? buf.readUuid() : null;
+		UUID pingEntity = null;
 
-		client.execute(() -> {
-			PingData ping = new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, client.world.getTime());
+		context.client().execute(() -> {
+			PingData ping = new PingData(pingSender, pingSenderId, PingData.Type.fromOrdinal(pingTypeOrdinal), pingPos, pingEntity, context.client().world.getTime());
 
 			pingList.add(ping);
-			playPingSound(client, ping);
+			playPingSound(context.client(), ping);
 		});
 	}
 
-	public static void onRenderWorld(MatrixStack stack, Matrix4f projectionMatrix, float tickDelta) {
+	public static void onRenderWorld(Matrix4f modelViewMatrix, Matrix4f projectionMatrix, float tickDelta) {
 		ClientWorld world =  MinecraftClient.getInstance().world;
-		Matrix4f modelViewMatrix = stack.peek().getPositionMatrix();
 
 		processPing(tickDelta);
 
@@ -189,7 +197,7 @@ public class MCPingsClient implements ClientModInitializer {
 					if (ent instanceof ItemEntity itemEnt) {
 						ping.itemStack = itemEnt.getStack().copy();
 					}
-					ping.pos = ent.getLerpedPos(tickDelta).add(0.0, ent.getBoundingBox().getYLength(), 0.0);
+					ping.pos = ent.getLerpedPos(tickDelta).add(0.0, ent.getBoundingBox().getLengthY(), 0.0);
 				}
 			}
 

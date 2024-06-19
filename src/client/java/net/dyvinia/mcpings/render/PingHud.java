@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -17,12 +18,13 @@ import org.joml.Vector4f;
 
 public class PingHud implements HudRenderCallback {
 
-    private static final Identifier PING_STANDARD = new Identifier("mcpings", "textures/ping_standard.png");
+    private static final Identifier PING_STANDARD = Identifier.of("mcpings", "textures/ping_standard.png");
 
     @Override
-    public void onHudRender(DrawContext context, float tickDelta) {
+    public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
         MatrixStack stack = context.getMatrices();
+        float tickDelta = tickCounter.getTickDelta(false);
         double uiScale = client.getWindow().getScaleFactor();
         Vec3d cameraPosVec = client.player.getCameraPosVec(tickDelta);
         int scaleDist = 10;
